@@ -1,5 +1,4 @@
 FROM node:14-buster
-CMD npm run start
 
 WORKDIR /app
 
