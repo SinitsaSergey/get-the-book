@@ -5,6 +5,6 @@ export class BookInput {
   @Field()
   title: string;
 
-  @Field((type) => [ID])
+  @Field(() => [ID])
   authorIds: number[];
 }

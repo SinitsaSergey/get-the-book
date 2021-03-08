@@ -1,11 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Author } from './author.model';
 
 @Entity()
 @ObjectType()
 export class Book {
-  @Field((type) => ID)
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -13,7 +13,6 @@ export class Book {
   @Column()
   title: string;
 
-  @ManyToMany(() => Author, (author) => author.books)
-  @JoinTable()
+  @ManyToMany(() => Author, (author) => author.books, { cascade: ['update'] })
   authors: Author[];
 }
