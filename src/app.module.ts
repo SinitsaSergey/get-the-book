@@ -12,11 +12,11 @@ import * as depthLimit from 'graphql-depth-limit';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'rootPassword',
-      database: 'demo',
+      host: process.env.TYPEORM_HOST || 'localhost',
+      port: +process.env.TYPEORM_PORT || 3306,
+      username: process.env.TYPEORM_USERNAME || 'root',
+      password: process.env.TYPEORM_PASSWORD || 'rootPassword',
+      database: process.env.TYPEORM_DATABASE || 'demo',
       autoLoadEntities: true,
       entities: [Book, Author],
       synchronize: true,

@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+
+  api:
+    container_name: app_api
+    image: nodejs
+    depends_on:
+      - db
+    networks:
+      - default
+    environment:
+      TYPEORM_HOST: app_db
+      TYPEORM_PORT: 3306
+      TYPEORM_USERNAME: root
+      TYPEORM_PASSWORD: rootPassword
+      TYPEORM_DATABASE: demo
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src:/app/src
+
+  db:
+    container_name: app_db
+    image: mysql:8.0.23
+    command: --init-file /docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "6000:3306"
+    restart: always
+    networks:
+      - default
+    environment:
+      MYSQL_DATABASE: demo
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: rootPassword
+    volumes:
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./mysql-data:/var/lib/mysql
+
+networks:
+  default:
+    driver: bridge

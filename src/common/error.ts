@@ -14,9 +14,3 @@ export class InvalidOrDuplicateAuthorException extends HttpException {
     super('Invalid or duplicate authorId', HttpStatus.BAD_REQUEST);
   }
 }
-
-export class InvalidAuthorOrNoBooks extends HttpException {
-  constructor() {
-    super('The author does not exist or does not have any books', HttpStatus.BAD_REQUEST);
-  }
-}
