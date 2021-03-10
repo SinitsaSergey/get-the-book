@@ -13,10 +13,13 @@ export class AuthorService extends BaseService<Author> {
 
   async findByFilter(filterArgs: AuthorFilterArgs): Promise<Author[]> {
     const { minNumberOfBooks = 0, maxNumberOfBooks = Number.MAX_SAFE_INTEGER } = filterArgs;
-    const authors = await super.findAll({ relations: ['books'] });
-    return authors.filter(
-      (author) => author.books.length >= minNumberOfBooks && author.books.length <= maxNumberOfBooks,
-    );
+    return await this.repository
+      .createQueryBuilder('author')
+      .leftJoinAndSelect('books_authors', 'BA', 'BA.author_id = id')
+      .groupBy('author_id')
+      .having('sum(BA.author_id is not null) >= :minNumberOfBooks', { minNumberOfBooks })
+      .andHaving('sum(BA.author_id is not null) <= :maxNumberOfBooks', { maxNumberOfBooks })
+      .getMany();
   }
 
   async deleteAuthorWithBooks(id: number): Promise<number> {
